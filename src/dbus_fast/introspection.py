@@ -34,9 +34,6 @@ class Arg:
         direction: Optional[list[ArgDirection]] = None,
         name: Optional[str] = None,
     ):
-        if name is not None:
-            assert_member_name_valid(name)
-
         type_ = None
         if type(signature) is SignatureType:
             type_ = signature
@@ -246,8 +243,6 @@ class Property:
         signature: str,
         access: PropertyAccess = PropertyAccess.READWRITE,
     ):
-        assert_member_name_valid(name)
-
         tree = get_signature_tree(signature)
         if len(tree.types) != 1:
             raise InvalidIntrospectionError(
