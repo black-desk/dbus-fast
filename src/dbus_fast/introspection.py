@@ -55,9 +55,6 @@ class Arg:
         name: Optional[str] = None,
         annotations: Optional[dict[str, str]] = None,
     ):
-        if name is not None:
-            assert_member_name_valid(name)
-
         type_ = None
         if type(signature) is SignatureType:
             type_ = signature
