@@ -260,7 +260,11 @@ class MessageBus(BaseMessageBus):
         return await future
 
     async def introspect(
-        self, bus_name: str, path: str, timeout: float = 30.0
+        self,
+        bus_name: str,
+        path: str,
+        timeout: float = 30.0,
+        validate_property_names: bool = True,
     ) -> intr.Node:
         """Get introspection data for the node at the given path from the given
         bus name.
@@ -295,6 +299,7 @@ class MessageBus(BaseMessageBus):
             path,
             partial(self._reply_handler, future),
             check_callback_type=False,
+            validate_property_names=validate_property_names,
         )
 
         timer_handle = self._loop.call_later(
