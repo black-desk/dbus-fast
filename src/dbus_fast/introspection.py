@@ -296,8 +296,10 @@ class Property:
         signature: str,
         access: PropertyAccess = PropertyAccess.READWRITE,
         annotations: Optional[dict[str, str]] = None,
+        validate: bool = True,
     ):
-        assert_member_name_valid(name)
+        if validate:
+            assert_member_name_valid(name)
 
         tree = get_signature_tree(signature)
         if len(tree.types) != 1:
@@ -311,7 +313,7 @@ class Property:
         self.type = tree.types[0]
         self.annotations = annotations or {}
 
-    def from_xml(element):
+    def from_xml(element, validate: bool = True):
         """Convert an :class:`xml.etree.ElementTree.Element` to a :class:`Property`.
 
         The element must be valid DBus introspection XML for a ``property``.
@@ -333,7 +335,7 @@ class Property:
 
         annotations = _fetch_annotations(element)
 
-        return Property(name, signature, access, annotations)
+        return Property(name, signature, access, annotations, validate=validate)
 
     def to_xml(self) -> ET.Element:
         """Convert this :class:`Property` into an :class:`xml.etree.ElementTree.Element`."""
@@ -383,7 +385,9 @@ class Interface:
         self.annotations = annotations or {}
 
     @staticmethod
-    def from_xml(element: ET.Element) -> "Interface":
+    def from_xml(
+        element: ET.Element, validate_property_names: bool = True
+    ) -> "Interface":
         """Convert a :class:`xml.etree.ElementTree.Element` into a
         :class:`Interface`.
 
@@ -407,7 +411,9 @@ class Interface:
             elif child.tag == "signal":
                 interface.signals.append(Signal.from_xml(child))
             elif child.tag == "property":
-                interface.properties.append(Property.from_xml(child))
+                interface.properties.append(
+                    Property.from_xml(child, validate=validate_property_names)
+                )
 
         interface.annotations = _fetch_annotations(element)
 
