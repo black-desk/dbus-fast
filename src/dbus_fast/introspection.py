@@ -10,15 +10,13 @@ from .validators import assert_interface_name_valid, assert_member_name_valid
 
 
 def _fetch_annotations(element: ET.Element) -> dict[str, str]:
-    annotations = {}
+    annotations: dict[str, str] = {}
 
     for child in element:
         if child.tag != "annotation":
             continue
-        annotation_name = child.attrib.get("name")
-        assert annotation_name is not None
-        annotation_value = child.attrib.get("value")
-        assert annotation_value is not None
+        annotation_name = child.attrib["name"]
+        annotation_value = child.attrib["value"]
         annotations[annotation_name] = annotation_value
 
     return annotations
