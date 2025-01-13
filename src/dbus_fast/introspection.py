@@ -22,7 +22,7 @@ def _fetch_annotations(element: ET.Element) -> dict[str, str]:
     return annotations
 
 
-def _extract_annotations(element: ET.Element, annotations: dict[str, str]):
+def _extract_annotations(element: ET.Element, annotations: dict[str, str]) -> None:
     for key, value in annotations.items():
         annotation = ET.Element("annotation", {"name": key, "value": value})
         element.append(annotation)
