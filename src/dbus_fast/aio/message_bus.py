@@ -278,6 +278,8 @@ class MessageBus(BaseMessageBus):
         :type path: str
         :param timeout: The timeout to introspect.
         :type timeout: float
+        :param validate_property_names: Whether to validate property names or not.
+        :type validate_property_names: bool
 
         :returns: The introspection data for the name at the path.
         :rtype: :class:`Node <dbus_fast.introspection.Node>`

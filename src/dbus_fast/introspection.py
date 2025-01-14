@@ -489,6 +489,8 @@ class Node:
         :type element: :class:`xml.etree.ElementTree.Element`
         :param is_root: Whether this is the root node
         :type is_root: bool
+        :param validate_property_names: Whether to validate property names or not
+        :type validate_property_names: bool
 
         :raises:
             - :class:`InvalidIntrospectionError <dbus_fast.InvalidIntrospectionError>` - If the XML tree is not valid introspection data.
@@ -519,6 +521,8 @@ class Node:
 
         :param data: The XMl string.
         :type data: str
+        :param validate_property_names: Whether to validate property names or not
+        :type validate_property_names: bool
 
         :raises:
             - :class:`InvalidIntrospectionError <dbus_fast.InvalidIntrospectionError>` - If the string is not valid introspection data.
