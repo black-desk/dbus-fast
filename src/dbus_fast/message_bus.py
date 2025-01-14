@@ -262,6 +262,7 @@ class BaseMessageBus:
         path: str,
         callback: Callable[[Optional[intr.Node], Optional[Exception]], None],
         check_callback_type: bool = True,
+        validate_property_names: bool = True,
     ) -> None:
         """Get introspection data for the node at the given path from the given
         bus name.
@@ -287,7 +288,7 @@ class BaseMessageBus:
         def reply_notify(reply: Optional[Message], err: Optional[Exception]) -> None:
             try:
                 BaseMessageBus._check_method_return(reply, err, "s")
-                result = intr.Node.parse(reply.body[0])  # type: ignore[union-attr]
+                result = intr.Node.parse(reply.body[0], validate_property_names=validate_property_names)  # type: ignore[union-attr]
             except Exception as e:
                 callback(None, e)
                 return

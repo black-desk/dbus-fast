@@ -417,8 +417,6 @@ class Interface:
 
         interface.annotations = _fetch_annotations(element)
 
-        interface.annotations = _fetch_annotations(element)
-
         return interface
 
     def to_xml(self) -> ET.Element:
@@ -480,7 +478,9 @@ class Node:
         self.is_root = is_root
 
     @staticmethod
-    def from_xml(element: ET.Element, is_root: bool = False):
+    def from_xml(
+        element: ET.Element, is_root: bool = False, validate_property_names: bool = True
+    ) -> "Node":
         """Convert an :class:`xml.etree.ElementTree.Element` to a :class:`Node`.
 
         The element must be valid DBus introspection XML for a ``node``.
@@ -497,14 +497,22 @@ class Node:
 
         for child in element:
             if child.tag == "interface":
-                node.interfaces.append(Interface.from_xml(child))
+                node.interfaces.append(
+                    Interface.from_xml(
+                        child, validate_property_names=validate_property_names
+                    )
+                )
             elif child.tag == "node":
-                node.nodes.append(Node.from_xml(child))
+                node.nodes.append(
+                    Node.from_xml(
+                        child, validate_property_names=validate_property_names
+                    )
+                )
 
         return node
 
     @staticmethod
-    def parse(data: str) -> "Node":
+    def parse(data: str, validate_property_names: bool = True) -> "Node":
         """Parse XML data as a string into a :class:`Node`.
 
         The string must be valid DBus introspection XML.
@@ -521,7 +529,9 @@ class Node:
                 'introspection data must have a "node" for the root element'
             )
 
-        return Node.from_xml(element, is_root=True)
+        return Node.from_xml(
+            element, is_root=True, validate_property_names=validate_property_names
+        )
 
     def to_xml(self) -> ET.Element:
         """Convert this :class:`Node` into an :class:`xml.etree.ElementTree.Element`."""
